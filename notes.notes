@@ -1,0 +1,138 @@
+-----------------------------------------------------------
+    Sockets API in Java
+-----------------------------------------------------------
+
+- Learning how to use Sockets in Java
+
+Goal: In order to work towards a project worth fighting for
+on a daily basis, I have to start small and work my way up...
+Working with sockets will lay the foundation to understanding
+interprocess communication, a step to making my own messaging app.
+
+-----------------------------------------------------------
+    Sockets [ REVIEW ]
+-----------------------------------------------------------
+
+- Socket: An endpoint of a two-way communication
+running on some kind of network. It is bound to a port number
+(the #port number# specfies the particular process/application the 
+connection is meant for, while the #IP address# specifies the machine)
+
+- Client_Server_Model: Essential model of network computing today
+that states the fundamental relationship between machines connected
+via a network. A #server# provides resources and the #client# requests
+those resources utilizing some kind of protocol to define how communication
+sohuld be handled between both remote parties (e.g. what should the server be 
+expecting from the client?)
+
+1. Create a socket
+2. Open an input and output stream to the socket
+3. Read and write to the stream according to the server's protocol
+4. Close the streams
+5. Close the socket 
+
+[ #SERVER# ]
+1. Create socket
+2. bind() -> associates the socket to a valid address, necessary for a server to have a static IP
+3. listen() -> waits for an incoming request
+4. accept() -> establishes connection with request (in Java, the accept() method includes listen())
+5. Read/Write
+
+[ #CLIENT# ]
+1. Create socket
+2. connect() -> sends request to server at given address
+3. Read/Write
+
+-----------------------------------------------------------
+    #Java I/O
+-----------------------------------------------------------
+1. #Byte Stream# - Low level I/O stream that can manipulate 8-bit bytes (often avoided)
+2. #Character Stream# - Works the same as byte streams with automatic translation to local character sets (internationalization)
+3. #Buffered Streams# -  Used to minimize the overhead needed for OS-level operations for reading/writing input; acceses, holds and flushes in chunks (buffer)
+4. #Scanning + Formatting# - In order to work with information that is actually readable we use *Scanner* (breaks down input into tokens) and *PrintWriter* (formats to more-readable forms)
+5. #Standard I/O# - Like C, Java has 3 main fronts for I/O: Standard Input (`System.in`), Standard Output (`System.out`) and Standard Error (`System.err`) - all byte streams
+6. #Console# - Character stream and more-feature-rich version of standard I/O and especially useful for secure password entry
+
+-----------------------------------------------------------
+    !PROJECT OUTLINE!
+-----------------------------------------------------------
+
+- Create a basic Java version of netcat - arbitrary client/server communication (2 running programs needed)
+- NOTE: In order to get around making them two separate Java projects, we can use a command line argument to differentiate client and server functionality
+
+. With netcat it seems like both people messaging are simultaneously acting as servers and clients (you send + receive messages), but really 
+the person who starts the program first would be the initial 'server' (if there doesn't already exist a listening connection), and the next person
+would simply connect to the address.
+
+. It would also be cool for each person to have an identity + profile (can be wrapped in its own class)
+
+[java]
+
+import java.net.Socket;
+
+	public class Communicator{
+		// object that wraps user functionality
+		// each user would either initially listen on the given address or connect to that address (if already listening)
+	}
+
+	public class SocketServer{
+
+		// 'Listener' functinality
+		ServerSocket server = new ServerSocket();
+		SocketAddress address = new InetSocketAddress("hostname", 8000);
+		server.bind(address);
+		
+		// while loop logic?
+		server.accept();
+	}
+
+	public class SocketClient{
+		// 'Client' functinality
+		Socket client = new Socket();
+		SocketAddress address = new InetSocketAddress("hostname", 8000);
+		
+		// loop logic?
+		client.connect(address);
+	}
+	
+[\java]]
+
+------------------------------------------------------------
+   #What port number should I be using when testing locally?
+-----------------------------------------------------------
+ - Pretty straight forward answer for the most part. Given the
+ outline for the Internet Protocol suite, designating port numbers
+ for specific purposes (outlined in the #RFC 1700#). Thus a quick rule
+ of thumb as to not disrupt the designated, specialized ports is 
+ to use any port >1024 (0-1024 are resreved by the protocol) and 
+ <65535 (largest unassigned port number)
+
+------------------------------------------------------------
+	#Why is the exception handling framework in Java useful?
+-----------------------------------------------------------
+
+- Why Use it?
+	1. Separates error-handling code w/ functionality, so as to
+	increase code readbability
+	2. Propagate errors up the call stack; ultimately giving the
+	programmer the agency to specify error handling flow (such as
+	only catching the exception for relevant methods)
+	3. Distinct + organized hierarchy > generic errors -- the more
+	specific the information about what went wrong, the easier the fix
+
+- Best Practices
+	1. Use finally block to avoid resource leaks (InputStream, Scanner, etc.)
+	2. Specific Exceptions > General Exceptions (same as above)
+	3. Effectively document exceptions w/ `@throws` and descriptive messages
+	4. Catch the most specific exception first
+
+
+ 
+
+
+
+
+
+	
+
+

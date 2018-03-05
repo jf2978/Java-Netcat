@@ -8,32 +8,49 @@ import java.io.IOException;
 public class MySocketServer {
     
     // INSTANCE VARIABLES
-    int port;
-	String host;
-	ServerSocket server;
-	SocketAddress address;
+    private int port;
+	private String host;
+	private ServerSocket server;
+	private SocketAddress address;
 
     // CONSTRUCTORS
-    public MySocketServer() throws IOException{
+    public MySocketServer() throws IOException {
     	port = 8080;
     	host = "localhost";
-        ServerSocket server = new ServerSocket();
-        SocketAddress address = new InetSocketAddress(host, port);
+        server = new ServerSocket();
+        address = new InetSocketAddress(host, port);
         server.bind(address);
     }
 
-    public MySocketServer(String hostname, int portNum) throws IOException{
+    public MySocketServer(String hostname, int portNum) throws IOException {
 		port = portNum;
     	host = hostname;
-        ServerSocket server = new ServerSocket();
-        SocketAddress address = new InetSocketAddress(host, port);
+        server = new ServerSocket();
+        address = new InetSocketAddress(host, port);
         server.bind(address);
     }
 
     // METHODS
-    public Socket listen() throws IOException{
-    	System.out.printf("Starting connection at port %d", port);
-    	return server.accept();
+    public Socket start() throws IOException {
+    	System.out.printf("%s started listening for a connection on port %d", server, port);  
+        StringBuilder sb = new StringBuilder(".");
+        Socket sock = server.accept();
+        while(sock == null){
+            for(int i = 0; i < 100; i++){
+                // simulate waiting 
+            }
+            System.out.print(sb.toString());
+            sb.append(".");
+            sock = server.accept();
+        }
+        return sock;
+    }	
+
+    public String getHost(){
+        return host;
     }
-		
+
+    public int getPort(){
+        return port;
+    }
 }

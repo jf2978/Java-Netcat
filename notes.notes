@@ -57,23 +57,19 @@ expecting from the client?)
     !PROJECT OUTLINE!
 -----------------------------------------------------------
 
-- Create a basic Java version of netcat - arbitrary client/server communication (2 running programs needed)
-- NOTE: In order to get around making them two separate Java projects, we can use a command line argument to differentiate client and server functionality
+. Create a basic Java version of netcat - arbitrary client/server communication (2 running programs needed)
+. NOTE: In order to get around making them two separate Java projects, we can use a command line argument to differentiate client and server functionality
 
 . With netcat it seems like both people messaging are simultaneously acting as servers and clients (you send + receive messages), but really 
 the person who starts the program first would be the initial 'server' (if there doesn't already exist a listening connection), and the next person
 would simply connect to the address.
 
 . It would also be cool for each person to have an identity + profile (can be wrapped in its own class)
+. NOTE: In order to use the shell script, the view settings of sublime have to be changed to Unix 
 
 [java]
 
 import java.net.Socket;
-
-	public class Communicator{
-		// object that wraps user functionality
-		// each user would either initially listen on the given address or connect to that address (if already listening)
-	}
 
 	public class SocketServer{
 
@@ -95,7 +91,7 @@ import java.net.Socket;
 		client.connect(address);
 	}
 	
-[\java]]
+[\java]
 
 ------------------------------------------------------------
    #What port number should I be using when testing locally?
@@ -125,6 +121,16 @@ import java.net.Socket;
 	2. Specific Exceptions > General Exceptions (same as above)
 	3. Effectively document exceptions w/ `@throws` and descriptive messages
 	4. Catch the most specific exception first
+
+------------------------------------------------------------
+    #Potential Improvements
+-----------------------------------------------------------
+
+. Adding *communicator* object that includes some personal information; 
+can be displayed upon conenction, or can be queryed by another user
+. Multiple client support (Introduction to threading perhaps?)
+
+
 
 
  

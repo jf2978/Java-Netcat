@@ -1,12 +1,10 @@
 
-import java.net.ServerSocket;
-import java.net.SocketAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.io.IOException;
+import java.net.*;
+import java.io.*;
+import java.lang.Thread;
 
 public class MySocketServer {
-    
+
     // INSTANCE VARIABLES
     private int port;
 	private String host;
@@ -31,18 +29,17 @@ public class MySocketServer {
     }
 
     // METHODS
-    public Socket start() throws IOException {
-    	System.out.printf("%s started listening for a connection on port %d", server, port);  
+    public Socket start() throws IOException, InterruptedException  {
+    	System.out.printf(" %s started listening for a connection on port %d", server, port);
         StringBuilder sb = new StringBuilder(".");
-        Socket sock = server.accept();
-        while(sock == null){
-            for(int i = 0; i < 100; i++){
-                // simulate waiting 
-            }
-            System.out.print(sb.toString());
-            sb.append(".");
-            sock = server.accept();
+        while(server.accept() == null){
+            Thread.sleep(2000);
         }
+        Socket sock = server.accept();
+        PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
+        System.out.println("Client connected");
+        BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+
         return sock;
     }	
 

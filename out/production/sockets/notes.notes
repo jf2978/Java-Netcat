@@ -123,22 +123,10 @@ import java.net.Socket;
 	3. Effectively document exceptions w/ `@throws` and descriptive messages
 	4. Catch the most specific exception first
 
-
-------------------------------------------------------------
-    #What does it mean for a thread to be interrupted - e.g. Interrupted Exceptions
------------------------------------------------------------
-
-. An *interrupt* is an indication to a thread that it should stop what it 
-is doing and do something else. It's up to the programmer to decide exactly 
-how a thread responds to an interrupt, but it is very common for the 
-thread to terminate. 
-
-- More on this concept later...
-
 ------------------------------------------------------------
     #Potential Improvements
 -----------------------------------------------------------
 
 . Adding *communicator* object that includes some personal information; 
 can be displayed upon connection, or can be queried by another user
-. Multiple client support (Introduction to *threading* perhaps?)
+. Multiple client support (Introduction to threading perhaps?)

@@ -142,3 +142,5 @@ thread to terminate.
 . Adding *communicator* object that includes some personal information; 
 can be displayed upon connection, or can be queried by another user
 . Multiple client support (Introduction to *threading* perhaps?)
+. In order to incorporate some kind of loading screenm I would need to make a
+separate thread while the accept() call is *blocking* the initial thread

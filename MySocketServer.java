@@ -29,13 +29,12 @@ public class MySocketServer {
     }
 
     // METHODS
-    public Socket start() throws IOException, InterruptedException  {
-    	System.out.printf(" %s started listening for a connection on port %d", server, port);
+    public Socket start() throws IOException {
+    	// listen for client to connect
+        System.out.printf(" %s started listening for a connection on port %d", server, port);
         StringBuilder sb = new StringBuilder(".");
-        while(server.accept() == null){
-            Thread.sleep(2000);
-        }
         Socket sock = server.accept();
+        // do stuff once client connects
         PrintWriter out = new PrintWriter(sock.getOutputStream(), true);
         System.out.println("Client connected");
         BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));

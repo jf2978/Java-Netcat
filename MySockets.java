@@ -19,6 +19,8 @@ public class MySockets {
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
+        } catch(InterruptedException e){
+            System.out.println("Thread Interruption occurred!");
         } catch (IOException e) {
             System.out.println(e.getMessage());
         } finally {

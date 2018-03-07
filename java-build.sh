@@ -5,4 +5,4 @@ find -name "*.java" > sources.txt
 javac @sources.txt
 	
 # run
-java MySockets -l localhost 8080
+java NetCatServer -l localhost 8080

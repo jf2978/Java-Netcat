@@ -16,7 +16,7 @@ interprocess communication, a step to making my own messaging app.
 - Socket: An endpoint of a two-way communication
 running on some kind of network. It is bound to a port number
 (the #port number# specfies the particular process/application the 
-connection is meant for, while the #IP address# specifies the machine)
+connection is meant for, while the #IP address# specifies the 	machine)
 
 - Client_Server_Model: Essential model of network computing today
 that states the fundamental relationship between machines connected
@@ -32,6 +32,7 @@ expecting from the client?)
 5. Close the socket 
 
 [ #SERVER# ]
+
 1. Create socket
 2. bind() -> associates the socket to a valid address, necessary for a server to have a static IP
 3. listen() -> waits for an incoming request
@@ -39,16 +40,16 @@ expecting from the client?)
 5. Read/Write
 
 [ #CLIENT# ]
+
 1. Create socket
 2. connect() -> sends request to server at given address
-3. Read/Write
+3. Read/write
 
------------------------------------------------------------
-    #Java I/O
------------------------------------------------------------
+[ #Java I/O# ]
+
 1. #Byte Stream# - Low level I/O stream that can manipulate 8-bit bytes (often avoided)
 2. #Character Stream# - Works the same as byte streams with automatic translation to local character sets (internationalization)
-3. #Buffered Streams# -  Used to minimize the overhead needed for OS-level operations for reading/writing input; acceses, holds and flushes in chunks (buffer)
+3. #Buffered Streams# -  Used to minimize the overhead needed for OS-level operations for reading/writing input; accesses, holds and flushes in chunks (buffer)
 4. #Scanning + Formatting# - In order to work with information that is actually readable we use *Scanner* (breaks down input into tokens) and *PrintWriter* (formats to more-readable forms)
 5. #Standard I/O# - Like C, Java has 3 main fronts for I/O: Standard Input (`System.in`), Standard Output (`System.out`) and Standard Error (`System.err`) - all byte streams
 6. #Console# - Character stream and more-feature-rich version of standard I/O and especially useful for secure password entry
@@ -66,6 +67,9 @@ would simply connect to the address.
 
 . It would also be cool for each person to have an identity + profile (can be wrapped in its own class)
 . NOTE: In order to use the shell script, the view settings of sublime have to be changed to Unix 
+
+[ #DESIGN CHOICES# ]
+. 
 
 [java]
 
@@ -92,6 +96,10 @@ import java.net.Socket;
 	}
 	
 [\java]
+
+------------------------------------------------------------
+    *QUESTIONS*
+-----------------------------------------------------------
 
 ------------------------------------------------------------
    #What port number should I be using when testing locally?

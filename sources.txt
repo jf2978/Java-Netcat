@@ -1,3 +1,4 @@
 ./MySocketClient.java
 ./MySocketServer.java
+./NetCatClient.java
 ./NetCatServer.java

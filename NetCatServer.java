@@ -14,7 +14,7 @@ public class NetCatServer {
         String hostname = args[1];
         int port = Integer.parseInt(args[2]);
 
-        // try-with-resources statement
+        // try-with-resources
         try(MySocketServer server = new MySocketServer(hostname, port);
                 Socket connection = server.start();
                 PrintWriter out = new PrintWriter(connection.getOutputStream() , true);

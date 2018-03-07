@@ -22,7 +22,7 @@ public class MySocketServer implements AutoCloseable{
     public MySocketServer(String hostname, int portNum) throws IOException {
         port = portNum;
         host = hostname;
-        address = new InetSocketAddress(host, port);
+        address = new InetSocketAddress(hostname, portNum);
         server = new ServerSocket();
         server.bind(address);
     }

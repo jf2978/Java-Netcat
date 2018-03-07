@@ -69,7 +69,13 @@ would simply connect to the address.
 . NOTE: In order to use the shell script, the view settings of sublime have to be changed to Unix 
 
 [ #DESIGN CHOICES# ]
-. 
+. Chose to catch a number of exceptions (like the IOExceptions that crowded the MySocketServer 
+constructor and methods) due to the common appearance of the IOException and the different possible
+places they could be coming from - it made more sense to fail fast instead of propogating values
+of a deeper error like failure to bind/instantiate the server socket
+
+[java]
+
 
 [java]
 
@@ -101,9 +107,7 @@ import java.net.Socket;
     *QUESTIONS*
 -----------------------------------------------------------
 
-------------------------------------------------------------
    #What port number should I be using when testing locally?
------------------------------------------------------------
  
  - Pretty straight forward answer for the most part. Given the
  outline for the Internet Protocol suite, designating port numbers
@@ -112,9 +116,7 @@ import java.net.Socket;
  to use any port >1024 (0-1024 are resreved by the protocol) and 
  <65535 (largest unassigned port number)
 
-------------------------------------------------------------
 	#Why is the exception handling framework in Java useful?
------------------------------------------------------------
 
 - Why Use it?
 	1. Separates error-handling code w/ functionality, so as to
@@ -132,9 +134,7 @@ import java.net.Socket;
 	4. Catch the most specific exception first
 
 
-------------------------------------------------------------
     #What does it mean for a thread to be interrupted - e.g. Interrupted Exceptions
------------------------------------------------------------
 
 . An *interrupt* is an indication to a thread that it should stop what it 
 is doing and do something else. It's up to the programmer to decide exactly 
@@ -142,6 +142,16 @@ how a thread responds to an interrupt, but it is very common for the
 thread to terminate. 
 
 - More on this concept later...
+
+	#Why does the accept() method return a socket?
+
+. The initial client and server sockets arent the only endpoints used for
+connections in a sense because accept actaully ends up returning a socket
+of its own once a connection is established
+. According to Beej's *Socket Programming Guide in C*: "It'll return to you "
+"a brand new socket file descriptor to use for this single connection..."
+"The original one is still listening for more new connections, and the "
+"newly created one is finally ready to send() and recv()."
 
 ------------------------------------------------------------
     #Potential Improvements
@@ -152,3 +162,4 @@ can be displayed upon connection, or can be queried by another user
 . Multiple client support (Introduction to *threading* perhaps?)
 . In order to incorporate some kind of loading screenm I would need to make a
 separate thread while the accept() call is *blocking* the initial thread
+

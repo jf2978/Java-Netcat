@@ -2,7 +2,7 @@
 import java.net.*;
 import java.io.*;
 
-public class MySocketServer {
+public class MySocketServer implements AutoCloseable{
 
     // INSTANCE VARIABLES
     private int port;
@@ -14,37 +14,34 @@ public class MySocketServer {
     public MySocketServer() throws IOException {
         port = 8080;
         host = "localhost";
-        server = new ServerSocket();
         address = new InetSocketAddress(host, port);
+        server = new ServerSocket();
         server.bind(address);
     }
 
     public MySocketServer(String hostname, int portNum) throws IOException {
         port = portNum;
         host = hostname;
-        server = new ServerSocket();
         address = new InetSocketAddress(host, port);
+        server = new ServerSocket();
         server.bind(address);
     }
 
-    // METHODS
+    // INTERFACE METHODS
+    public void close() throws IOException{
+        this.server.close();
+    }
+
+    // PUBLIC METHODS
     public Socket start() throws IOException {
-        System.out.printf(" %s started listening for a connection on port %d...\n", server, port);
-        Socket sock = server.accept(); // blocking, throws IOException
+        System.out.printf(" %s started listening for a connection on port %d...\n", this.toString(), port);
+        Socket sock = server.accept(); // blocking
         System.out.println("Client connected");
         return sock;
     }
 
-    public String getHost() {
-        return host;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public SocketAddress getAddress(){
-        return address;
+    public String toString(){
+        return String.format("[ Address: %s, Port: %d]", server.getInetAddress(), port);
     }
 }
 

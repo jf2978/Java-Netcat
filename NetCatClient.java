@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.Scanner;
 
 public class NetCatClient {
     public static void main(String[] args){
@@ -14,14 +15,16 @@ public class NetCatClient {
         // try-with-resources
         try(MySocketClient client = new MySocketClient(hostname, port);
             PrintWriter out = new PrintWriter(client.getOutputStream() , true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()))){
-            client.start(client.getAddress());
+            Scanner in = new Scanner(new InputStreamReader(client.getInputStream()))){
 
+            System.out.println("*** You are now connected to NetCat 1.0 ***\n");
             // read + write to established connection
             String inputLine;
-            while ((inputLine = in.readLine()) != null) {
-                out.println(inputLine);
+            while ((inputLine = in.nextLine()) != null) {
+                System.out.println("pass#2");
+                out.print(inputLine);
             }
+            System.out.println("pass#3");
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         } catch(IOException e){

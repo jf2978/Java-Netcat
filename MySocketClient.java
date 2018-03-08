@@ -25,13 +25,20 @@ import java.io.*;
             client = new Socket(host, port);
         }
 
+        public MySocketClient(Socket sock){
+            client = sock;
+            address = sock.getLocalSocketAddress();
+            port = sock.getPort();
+            host = sock.getInetAddress().getHostName();
+        }
         // INTERFACE METHODS
         public void close() throws IOException{
             this.client.close();
         }
 
         // PUBLIC METHODS
-        public void start(SocketAddress server) throws IOException{
+        public void start() throws IOException{
+            SocketAddress server = this.address;
             System.out.printf(" Trying to connect to %s on port %d...\n", server.toString(), port);
             this.client.connect(server, 5000); // blocking
             System.out.println("Connected to server");
@@ -50,6 +57,6 @@ import java.io.*;
         }
 
         public String toString(){
-            return String.format("[ Address: %s, Port: %d]", client.getInetAddress(), port);
+            return String.format("[ Address: %s, Port: %d ]", client.getInetAddress(), port);
         }
     }

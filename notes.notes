@@ -73,9 +73,12 @@ would simply connect to the address.
 constructor and methods) due to the common appearance of the IOException and the different possible
 places they could be coming from - it made more sense to fail fast instead of propogating values
 of a deeper error like failure to bind/instantiate the server socket
+. While it really doesn't matter which is teachnically the "client" and which is the "server", 
+the distinctions for this project were made in order to account for new use cases down the road
+(e.g. chat bot that multiple clients can connect to, server that relays messages to other clients, etc.)
 
 [java]
-
+	
 
 [java]
 
@@ -153,6 +156,19 @@ of its own once a connection is established
 "The original one is still listening for more new connections, and the "
 "newly created one is finally ready to send() and recv()."
 
+	#Why does the port number change after accept()?
+. While listening, our server is on a static port - statically waiting for
+connections at the specific address + port
+. Once accepted, not only is a new socket returned, but because every connection
+needs a unique file descriptor, once a connection with a client is established,
+ the newly returned application-level socket is chosen at random (for the most part)
+. An interesting analogy for this would be to think of the listen()-ing server and
+connect()-ing client as agreeing upon a meeting point (say port 8080) and migrating
+else where after they've met up. Now say multiple connections are trying to meet, in
+order for the server to handle the multiple different requests from the incoming
+clients, spearating each to their own "channel" makes it easier to compartmentalize 
+resource requests for the server to handle. 
+
 ------------------------------------------------------------
     #Potential Improvements
 -----------------------------------------------------------
@@ -162,4 +178,7 @@ can be displayed upon connection, or can be queried by another user
 . Multiple client support (Introduction to *threading* perhaps?)
 . In order to incorporate some kind of loading screenm I would need to make a
 separate thread while the accept() call is *blocking* the initial thread
-
+. Change the port number of my sockets to be inputs to start() and not an 
+instance variable? Probably not a big difference (instantiate the server
+with a port instead of using it for start), so it would depend more so
+on potential use cases

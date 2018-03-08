@@ -17,19 +17,25 @@ public class NetCatServer {
         // try-with-resources
         try(MySocketServer server = new MySocketServer(hostname, port);
                 MySocketClient client = server.start();
-                PrintWriter out = new PrintWriter(client.getOutputStream() , true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()))){
+                PrintWriter output = new PrintWriter(client.getOutputStream() , true);
+                BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                Scanner in = new Scanner(System.in)){
 
             System.out.printf("*** Successfully connected to user: %s ***\n", client.toString());
 
             String inputLine;
-            while ((inputLine = in.readLine()) != null) {
+            while (in.hasNextLine()){
                 System.out.println(inputLine);
                 if(inputLine.equals("see ya!")){
-                    out.print("see ya later!");
+                    output.print("see ya later!");
                     break;
                 }
-                out.println(inputLine);
+                while ((inputLine = input.readLine()) != null) {
+                    System.out.println(inputLine);
+                    if(in.hasNextLine()){
+                        output.print(in.nextLine());
+                    }
+                }
             }
             System.out.println("pass#3");
         } catch (IllegalArgumentException e) {

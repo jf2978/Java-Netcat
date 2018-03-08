@@ -169,7 +169,103 @@ order for the server to handle the multiple different requests from the incoming
 clients, spearating each to their own "channel" makes it easier to compartmentalize 
 resource requests for the server to handle. 
 
+	#Don't println to a Socket - JavaRanch Technote 1157
+. After constant debugging of BufferedReader and never getting the application to read 
+a line I stumbled upon this article that help me understand common causes of 
+client-server deadlocks in Java
+. This article primarily refers to the different line-breaking conventions and the
+inherent dangers of using *println* with sockets, since Mac operating systems
+
+
+	#What is a thread, and why do I need them
+. In order to fully realize the version of netcat that I am imagining, I need to get
+around all of these synchronous, blocking calls - I have to dive deep into learn threading...
+
 ------------------------------------------------------------
+    #Threads & Concurrent Java
+-----------------------------------------------------------
+
+[ #Processes and Threads #]
+
+. As it's probably obvious this day and age, concurrent programming, multi-core processors (with
+multi-threading within each of those cores) has become the pretty common and incredibly powerful)
+are often seen as synonymous with entire applications or programs, and to a certain
+extent this notion isn't totally off, however that are a number of applications that actually
+incroporate interprocess communcation (IPC) nto only within the same operating system, but even
+across different systems.
+. NOTE: Processes are are particular instances of a program thathave a 
+#self-contained execution environment# - that is, a process has, in and of itself, all
+the components it needs for execution. Processes have their own memory space, address space, executable
+code, and unique process identifier.
+. Furthermore, processes are known to be more for "heavyweight" tasks within an operating system, so 
+processes tend to have more overhead (given it requires dedicated memory/address space, etc.)
+. Threads are often referred to as lightweight process, but they aren't as related than at first glance.
+They are the smallest sequence of programmed instructions managed by the scheduler of an operating system.
+Each process has at least one thread, but what they are from the perspective of the operating system
+is very distinct: 
+. A *process* is more so related to data organization (setting aside memory and address
+space; an instance of execution instructions for an entirely new program); A *thread* is a more like
+a slice of process and is what the CPU actually runs - sharing resources with the process itself as well 
+as with other threads (if there are any).
+
+[ #Thread Objects# ]
+. In order to take advantage of this concurrency in Java, there are 2 different approaches to using
+Thread objects:
+	1) Using the Runnable interface (Interface)
+	2) Making the class you want to run asynchronously a *sublclass* of Thread (Inheritance)
+As with most inheritance/interface debates, interfaces often allow for more flexibility - and in the
+case of threads, are more applicable to some of the higher-level thread management (as opposed
+to simple asynchronous tasks/instantiations directly). Here's some sample code:
+
+[java]
+
+public class HelloRunnable implements Runnable {
+
+    public void run() {
+        System.out.println("Hello from a thread!");
+    }
+
+    public static void main(String args[]) {
+        (new Thread(new HelloRunnable())).start();
+    }
+}
+
+[java]
+
+
+[ #Important Thread Methods# ]
+
+1) sleep(): Causes the specified thread to explicitly stop execution for a specified period
+of time. In more detail, the sleep method interacts with the Operating System's scheduler
+to put the current thread in a wait state (then back to runnable) for the CPU to continue. 
+This means that sleep is !DEPENDENT! on the underlying OS scheduler and may not take more/less time than specified. 
+2) start():	Starts a thread's execution. For a Thread object, start() actually creates the thread
+so that the JVM can call the Runnable object's run() method in parallel. **run is called on a new thread** 
+3) run(): For a Runnable object, this is the custom method that defines what to do when the object
+is executed (run is called on it). By default (that is with no attached Runnable object other than Thread itself)
+this method does nothing. **run is called on the current thread**
+4) setPriority():	
+5) interrupt(): An *interrupt* is an indication to a thread that it should stop what its doing and do something else.
+Especially when taking into account the context of controlling execution flow that Threads are used for, the use
+of interrupts make sense. 
+	a. Numerous methods throw InterruptedException, such that Threads support their own interruptions in 
+	that sense - while the thread is doing whatever it's doing, the exception can be caught.
+	b. For operations that don't invoke methods with InterruptedException (say the thread is working for a while
+	or won't run any vaible methods for the remainder of its execution), we have to ensure that we manually check
+	using the available Thread methods (below)
+6) isInterrupted(): Checks if the Thread instance is *currently interrupted*
+7) interrupted(): (static) Checks if the current thread *has been interrupted since last time queried* and 
+subsequently *clears the interruption flag* (such that if called two times in a row, the second call would 
+be false *even if the first was true*)
+8) join(): This method allows for one thread to wait for the completion of another - such that calling
+join on a Thread object (let's call it t) causes the current thread to pause until t is finished executing.
+
+
+
+
+
+
+-----------------------------------------------------------
     #Potential Improvements
 -----------------------------------------------------------
 

@@ -2,12 +2,14 @@
     Sockets API in Java
 -----------------------------------------------------------
 
-- Learning how to use Sockets in Java
-
-Goal: In order to work towards a project worth fighting for
+Primary Goal: In order to work towards a project worth fighting for
 on a daily basis, I have to start small and work my way up...
 Working with sockets will lay the foundation to understanding
 interprocess communication, a step to making my own messaging app.
+
+Subgoals:
+	a. Learn how to use Sockets in Java (previous experience only in C)
+	b. Introduce myself to concurrent programming in Java (Threads)
 
 -----------------------------------------------------------
     Sockets [ REVIEW ]
@@ -16,14 +18,16 @@ interprocess communication, a step to making my own messaging app.
 - Socket: An endpoint of a two-way communication
 running on some kind of network. It is bound to a port number
 (the #port number# specfies the particular process/application the 
-connection is meant for, while the #IP address# specifies the 	machine)
+connection is meant for, while the #IP address# specifies the machine)
 
 - Client_Server_Model: Essential model of network computing today
 that states the fundamental relationship between machines connected
 via a network. A #server# provides resources and the #client# requests
-those resources utilizing some kind of protocol to define how communication
+those resources utilizing some kind of *protocol* to define how communication
 sohuld be handled between both remote parties (e.g. what should the server be 
-expecting from the client?)
+expecting from the client?). Sockets in Java would be operating via the TCP/IP protocol.
+
+[ #GENERAL FRAMEWORK# ]
 
 1. Create a socket
 2. Open an input and output stream to the socket
@@ -45,7 +49,41 @@ expecting from the client?)
 2. connect() -> sends request to server at given address
 3. Read/write
 
-[ #Java I/O# ]
+NOTE: The methods needed to establish a connection and the differences between "clients" and "servers" 
+are a bit more complicated - more details on why only the server binds to a port (i.e. why the client is auto-assigned), 
+why (in Java) there is no need to explicitly call connect on a listening port and address, etc.
+
+------------------------------------------------------------
+    Transmission Control and Internet Protocol (TCP/IP) [ OVERVIEW ]
+-----------------------------------------------------------
+
+- Without getting into too much detail about TCP/IP Architecture and the different protocol layers at play
+here (I will probably summarize my understanding of it into a diagram any way), this section is meant
+to give a quick overview of both TCP and IP (and why protocols are important in general)
+
+1. Transmission Control Protocol (Transport Layer): In general, TCP controls the transmission of data
+packets - ensuring reliability of sending and the integrity of the data itself. That is, TCP ensures
+data *reliably* reaches its destination in a *consistently* streamed fashion to avoid any hiccups for 
+more sensitive network operations (think VoIP calls, audio streaming, etc.) all in the correct *order* 
+(data is broken down into packets for ease of transmission, but a scrambled words in an essay you send
+to your professor is as good as not doing the assignment).
+
+2. Internet Protocol (Internet Layer): 	IP is charge of routing information, as well as constructing the addresses 
+that standardize the locations of every single internet-enabled device. Without getting overwhelmed with information 
+about the different types of IP addresses, it's mainly important to understand that IP addresses unique, 
+multi-layered locations that the protocol uses to actually get information from point A to point B.
+
+- Many of the cooperation of these protocol layers (especially with TCP/IP that work hand-in-hand), is done by
+specifying a data packet structure with additional bits of information (headers/tags) - TCP can mark the appropriate
+order for each packet, IP can effectively locate the destination address and attach the source address for example.
+
+- Overall the famous TCP/IP combo are what define the *rules and standards* for network communication. For the 
+purposes of this project, it gives insight into the magic behind the ability to send information from machine to 
+another anywhere else in the world at the touch of a button.
+
+------------------------------------------------------------
+    #Java I/O# (Simplified)
+------------------------------------------------------------
 
 1. #Byte Stream# - Low level I/O stream that can manipulate 8-bit bytes (often avoided)
 2. #Character Stream# - Works the same as byte streams with automatic translation to local character sets (internationalization)
@@ -77,8 +115,6 @@ of a deeper error like failure to bind/instantiate the server socket
 the distinctions for this project were made in order to account for new use cases down the road
 (e.g. chat bot that multiple clients can connect to, server that relays messages to other clients, etc.)
 
-[java]
-	
 
 [java]
 
@@ -175,8 +211,7 @@ a line I stumbled upon this article that help me understand common causes of
 client-server deadlocks in Java
 . This article primarily refers to the different line-breaking conventions and the
 inherent dangers of using *println* with sockets, since Mac operating systems
-
-
+	`
 	#What is a thread, and why do I need them
 . In order to fully realize the version of netcat that I am imagining, I need to get
 around all of these synchronous, blocking calls - I have to dive deep into learn threading...
@@ -239,12 +274,17 @@ public class HelloRunnable implements Runnable {
 of time. In more detail, the sleep method interacts with the Operating System's scheduler
 to put the current thread in a wait state (then back to runnable) for the CPU to continue. 
 This means that sleep is !DEPENDENT! on the underlying OS scheduler and may not take more/less time than specified. 
+
 2) start():	Starts a thread's execution. For a Thread object, start() actually creates the thread
 so that the JVM can call the Runnable object's run() method in parallel. **run is called on a new thread** 
+
 3) run(): For a Runnable object, this is the custom method that defines what to do when the object
 is executed (run is called on it). By default (that is with no attached Runnable object other than Thread itself)
 this method does nothing. **run is called on the current thread**
-4) setPriority():	
+
+4) setPriority(): Sets the current thread's priority (ranges between MIN_PRIORITY and MAX_PRIORITY) - more on 
+*Priority Scheduling* in Java below.
+
 5) interrupt(): An *interrupt* is an indication to a thread that it should stop what its doing and do something else.
 Especially when taking into account the context of controlling execution flow that Threads are used for, the use
 of interrupts make sense. 
@@ -253,17 +293,15 @@ of interrupts make sense.
 	b. For operations that don't invoke methods with InterruptedException (say the thread is working for a while
 	or won't run any vaible methods for the remainder of its execution), we have to ensure that we manually check
 	using the available Thread methods (below)
+
 6) isInterrupted(): Checks if the Thread instance is *currently interrupted*
+
 7) interrupted(): (static) Checks if the current thread *has been interrupted since last time queried* and 
 subsequently *clears the interruption flag* (such that if called two times in a row, the second call would 
 be false *even if the first was true*)
+
 8) join(): This method allows for one thread to wait for the completion of another - such that calling
 join on a Thread object (let's call it t) causes the current thread to pause until t is finished executing.
-
-
-
-
-
 
 -----------------------------------------------------------
     #Potential Improvements

@@ -210,7 +210,8 @@ resource requests for the server to handle.
 a line I stumbled upon this article that help me understand common causes of 
 client-server deadlocks in Java
 . This article primarily refers to the different line-breaking conventions and the
-inherent dangers of using *println* with sockets, since Mac operating systems
+inherent dangers of using *println* with sockets, since underlying operating systems
+expect LF, CRLF, CR...etc. 
 	`
 	#What is a thread, and why do I need them
 . In order to fully realize the version of netcat that I am imagining, I need to get
@@ -220,7 +221,7 @@ around all of these synchronous, blocking calls - I have to dive deep into learn
     #Threads & Concurrent Java
 -----------------------------------------------------------
 
-[ #Processes and Threads #]
+[ #Processes and Threads# ]
 
 . As it's probably obvious this day and age, concurrent programming, multi-core processors (with
 multi-threading within each of those cores) has become the pretty common and incredibly powerful)
@@ -302,6 +303,54 @@ be false *even if the first was true*)
 
 8) join(): This method allows for one thread to wait for the completion of another - such that calling
 join on a Thread object (let's call it t) causes the current thread to pause until t is finished executing.
+
+
+[ #Priority Scheduling# ]
+
+- In order to understand scheduling on a deeper level, I've tried to run through some concepts that both build 
+on top of each other and give insight to adjacent topics.
+
+	[ *Fixed Priority Preemptive Scheduling* ]
+		. A scheduling system handled by the operating system, typically used in *real time systems*, ensuring that
+		at any given time, the processor *executes the highest priority task* of all tasks ready to be executed.
+		Priority Scheduling tends to be a common use case for *priority queues* (relating back to past data strucuture coursework)
+		. `Fixed` in the sense of being set a specific priority rank for every process and subsequently being placed on the queue.
+		. `Preemptive` in the sense of the process'/thread's ability to get interrupted through no cooperation of its own
+		
+		[ *Real Time Systems* ]
+		. The term "real-time" mostly depends on the context to which the system is being used, characterized by specified time "deadlines".
+		In most cases, this is on the order of milliseconds.
+		. A real-time software application is thus categorized by the *guarantee of returning a processed result within the specified time* 
+		*frame regardless of system load* - a critical guarantee for time-sensitive operations (anti-lock brakes on a vehicle for ex.) 
+
+		[ *Preemption* ]
+			. Preemption is the act of temporarily interrupting a task being carried out, through no cooperation of its own,
+			with the intention of resuming the task at a later time.
+			. The detail that *preemption does not involve the process itself* is an important one: preemption tends
+			to refer to a sort overriding of process/thread functionality - normally carried out by a *privileged* task
+			(*Protection Rings*) or a preemptive scheduler (*Time Slices*)
+			. NOTE: The essential feature of storing the current process state and loading another's is more closely related to 
+			the term *context switching* 
+
+			[ *Protection Rings* ]
+				. Also called hierarchical proteciton domains, refer to the mechanism of giving certain operations some 
+				inherent priority (or `privilege`) - typically more strongly to those operations closer to hardware and operating
+				system kernel operations.
+
+			[ *Time Slice* ]
+				. Defined as the period of time for which a process is allowed to run in a preemptive multitasking system.
+				That is, for preemptive multitasking systems, the aim is to give each process a regular "slice" of operating time, 
+				allowing for more efficient multitasking that can rapidly deal with incoming data, current process, etc.
+				. Thus in this context, time slices defined by the preemptive scheduler have the power to "preempt" a current process'
+				operations (unsolicited interrupt essentially) for more efficient use elsewhere. 
+
+		[ *Resource Starvation* ]
+			. Starvation refers to the common problem in concurrent computing where a process is perpetually denied the resources
+			needed for its work. This situation is either caused by errors in scheduling, overly-simplistic scheduling algorithms, 
+			or resource leaks.
+			. NOTE: Taking advantage of potential resource starvation is what a number of viruses actually take advantage of (ex. DoS)
+			and the impossibility of starvation known as "starvation-freedom" or "lockout-freedom", is often quite necessary.
+
 
 -----------------------------------------------------------
     #Potential Improvements

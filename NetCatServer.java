@@ -1,46 +1,59 @@
 import java.io.IOException;
 import java.lang.IllegalArgumentException;
 import java.io.*;
-import java.util.Scanner;
 
 public class NetCatServer {
     public static void main(String[] args){
 
-        // Command-line arguments prompt on error
-        if (args.length < 3 || !args[0].equals("-l")) {
-            throw new IllegalArgumentException("Please specify the following arguments:\n1) listen flag, -l\n2) hostname\n3) port number\n");
+        String hostname = "localhost";
+        int port = 8080;
+
+        /* ====
+            Command-line argument handling
+         */
+        try{
+            if (args.length < 2) {
+                throw new IllegalArgumentException("Please specify the following arguments:\n" +
+                        "1) hostname [ String ]\n" +
+                        "2) port number [ Integer ]\n");
+            }
+
+            hostname = args[0];
+            port = Integer.parseInt(args[1]);
+
+        } catch(NumberFormatException e){
+            System.out.println("Port Number Error! Please enter a valid integer\n");
+            System.exit(1);
+        } catch(IllegalArgumentException e){
+            System.out.println(e.getMessage());
+            System.exit(1);
         }
 
-        String hostname = args[1];
-        int port = Integer.parseInt(args[2]);
-
-        // try-with-resources
+        /* ====
+           Start server
+         */
         try(MySocketServer server = new MySocketServer(hostname, port);
-                MySocketClient client = server.start();
-                PrintWriter output = new PrintWriter(client.getOutputStream() , true);
-                BufferedReader input = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                Scanner in = new Scanner(System.in)){
-
-            System.out.printf("*** Successfully connected to user: %s ***\n", client.toString());
+            MySocketClient client = server.listen();
+            PrintWriter out = new PrintWriter(client.getOutputStream());
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in))){
 
             String inputLine;
-            while (in.hasNextLine()){
-                System.out.println(inputLine);
-                if(inputLine.equals("see ya!")){
-                    output.print("see ya later!");
+            while ((inputLine = in.readLine()) != null){
+                System.out.println("Input Line: " + inputLine);
+                if(inputLine.equals("exit")) {
+                    System.out.println("-   Server exiting   -");
                     break;
                 }
-                while ((inputLine = input.readLine()) != null) {
-                    System.out.println(inputLine);
-                    if(in.hasNextLine()){
-                        output.print(in.nextLine());
-                    }
-                }
+                out.write(inputLine);
             }
-            System.out.println("pass#3");
-        } catch (IllegalArgumentException e) {
+
+        } catch (NumberFormatException e) {
             System.out.println(e.getMessage());
-        } catch (IOException e) {
+        } catch (IllegalArgumentException e) {
+            System.out.println("Hello catch");
+            System.out.println(e.getMessage());
+        }
+        catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }

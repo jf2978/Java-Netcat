@@ -2,23 +2,19 @@
 import java.net.*;
 import java.io.*;
 
-public class MySocketServer implements AutoCloseable{
+public class MySocketServer implements AutoCloseable, Runnable{
 
-    // INSTANCE VARIABLES
+    /* ====
+        INSTANCE VARIABLES
+     */
     private int port;
     private String host;
     private ServerSocket server;
     private SocketAddress address;
 
-    // CONSTRUCTORS
-    public MySocketServer() throws IOException {
-        port = 8080;
-        host = "localhost";
-        address = new InetSocketAddress(host, port);
-        server = new ServerSocket();
-        server.bind(address);
-    }
-
+    /* ====
+        CONSTRUCTORS
+     */
     public MySocketServer(String hostname, int portNum) throws IOException {
         port = portNum;
         host = hostname;
@@ -27,18 +23,44 @@ public class MySocketServer implements AutoCloseable{
         server.bind(address);
     }
 
-    // INTERFACE METHODS
+    // Default, overloaded constructor
+    public MySocketServer() throws IOException {
+        port = 8080;
+        host = "localhost";
+        address = new InetSocketAddress(host, port);
+        server = new ServerSocket();
+        server.bind(address);
+    }
+
+    /* ====
+        INTERFACE METHODS
+     */
     public void close() throws IOException{
         this.server.close();
     }
 
-    // PUBLIC METHODS
-    public MySocketClient start() throws IOException {
+    public void run() {
+        try{
+            System.out.println("Asynchronously starting MySocketServer...");
+            this.listen();
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /* ====
+        PUBLIC METHODS
+     */
+    public MySocketClient listen() throws IOException {
         System.out.printf(" %s started listening for a connection on port %d...\n", this.toString(), port);
         Socket sock = server.accept(); // blocking
         System.out.println("Client connected");
         return new MySocketClient(sock);
     }
+
+    public SocketAddress getAddress() { return address; }
+
+    public InputStream getInputStream() throws IOException{ return System.in; }
 
     public String toString(){
         return String.format("[ Address: %s, Port: %d ]", server.getInetAddress(), port);

@@ -34,23 +34,22 @@ public class NetCatServer {
          */
         try(MySocketServer server = new MySocketServer(hostname, port);
             MySocketClient client = server.listen();
-            PrintWriter out = new PrintWriter(client.getOutputStream());
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in))){
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            NetCatProtocol nc = new NetCatProtocol(client.getInputStream(), client.getOutputStream())){
 
             String inputLine;
             while ((inputLine = in.readLine()) != null){
-                System.out.println("Input Line: " + inputLine);
                 if(inputLine.equals("exit")) {
                     System.out.println("-   Server exiting   -");
                     break;
                 }
-                out.write(inputLine);
+                nc.recv();
+                nc.send(inputLine);
             }
 
         } catch (NumberFormatException e) {
             System.out.println(e.getMessage());
         } catch (IllegalArgumentException e) {
-            System.out.println("Hello catch");
             System.out.println(e.getMessage());
         }
         catch (IOException e) {

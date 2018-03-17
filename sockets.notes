@@ -114,7 +114,14 @@ of a deeper error like failure to bind/instantiate the server socket
 . While it really doesn't matter which is teachnically the "client" and which is the "server", 
 the distinctions for this project were made in order to account for new use cases down the road
 (e.g. chat bot that multiple clients can connect to, server that relays messages to other clients, etc.)
+. Protocol: 55 byte content length based on a few estimates:
+	a. Average word length: 5.1 letters (5.1 bytes)
+	b. Average text length: 7 words (7 bytes)
+	c. Number of spaces: 7 bytes
+									} *Overhead*
+	d. Message delimiter: <<END>> = 7 bytes
 
+. function: a * b + c + d = (5.1)(7) + 7 + 7 ~ 50 bytes
 
 [java]
 
@@ -235,11 +242,27 @@ and nice-to-haves if that helps.
 	a. Break the entire project down into subtasks
 	b. "Calendar-ize" - make a timeline that includes completing a few tasks at a time
 	c. Account for the fact that not every task can be foreseen + incroporated into the plan
-	d. Timebox open-ended parts of the project (especially for things like optimzation)
+	d. Timebox open-ended parts of the project (especially for things like optimization)
 3. Execution and Re-scoping:
 	a. Calibrate goals + tasks according to expected and actual progress
 	b. [ REPEAT ]
 
+	#Protocol Design
+. In order to successfully communicate between client and server, both parties must "agree to a language"
+in a sense. While I intially thought the protocol was preset with Java Sockets, I *misunderstood*
+the need for protocols that manage the various moving parts (just because TCP is utilized in Java
+sockets doesn't mean we don't need to define ****how to**** read or write from our sockets).
+. Given some research regarding pros/cons of existing protocols, here are a few key features to think
+about (primarily for future iterations, improvements, but also for curiosity)
+
+1. Necessary rountrips (latency)
+	- A client request -> server response is often referred to as a *roundtrip*. Depending on the
+	complexity of the communication or request, the protocol may require more than one (unlikely for messaging)
+2. End-of-Request Markers
+	- Put simply, the recipient of a message needs to know how long the message is expected to be in
+	some shape or form - remember data isn't always sent as a single collection of bytes, but as a
+	series of data packets that are like individual puzzle pieces to the whole message
+	- This gives some breathing room for transmission optimzations (perhaps?)
 
 ------------------------------------------------------------
     #Threads & Concurrent Java
@@ -381,16 +404,18 @@ on top of each other and give insight to adjacent topics.
 -----------------------------------------------------------
 
 [ OPEN-ENDED TASKS ]
-. Look into incorporating threads/concurrency into the project
+. Look into incorporating threads/concurrency into the project -> asynchronous send() + recv()
 . Research error handline best practices (stderr -> text file or?)
 
 [ QUICK TASKS (<= 1 Day) ]
 [x] Specify command line argument instructions + error handling (server)
 [x] Specify command line argument instructions + error handling (client)
 [ ] Redirect error handling to a text file?
+[x] Define NetCat Protocol
 
 [ LARGER TASKS - (> 1 Day) ] 
 [ ] Merge server + client functionality?
+[ ] Implement continuous I/O socket streams: client stdin -> server (read) -> server stdout (+ vice versa) 
 -----------------------------------------------------------
     #Potential Improvements
 -----------------------------------------------------------

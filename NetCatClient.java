@@ -32,20 +32,19 @@ public class NetCatClient {
          */
 
         try(MySocketClient client = new MySocketClient(hostname, port);
-            PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()))){
+            NetCatProtocol nc = new NetCatProtocol(client.getInputStream(), client.getOutputStream());
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in))){
 
             System.out.println("*** You are now connected to NetCat 1.0 ***\n");
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
-                System.out.println("Input Line: " + inputLine);
-
                 if(inputLine.equals("exit")) {
                     System.out.println("-   Disconnecting from NetCat 1.0...   -");
                     break;
                 }
-                out.write(inputLine);
+                nc.recv();
+                nc.send(inputLine);
             }
 
         } catch (IllegalArgumentException e) {

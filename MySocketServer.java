@@ -60,8 +60,6 @@ public class MySocketServer implements AutoCloseable, Runnable{
 
     public SocketAddress getAddress() { return address; }
 
-    public InputStream getInputStream() throws IOException{ return System.in; }
-
     public String toString(){
         return String.format("[ Address: %s, Port: %d ]", server.getInetAddress(), port);
     }

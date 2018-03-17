@@ -56,7 +56,7 @@ import java.io.*;
 
         public OutputStream getOutputStream() throws IOException{ return client.getOutputStream(); }
 
-        public InputStream getInputStream() throws IOException{ return System.in; }
+        public InputStream getInputStream() throws IOException{ return client.getInputStream(); }
 
         public String toString(){
             return String.format("[ Address: %s, Port: %d ]", client.getInetAddress(), port);

@@ -407,7 +407,7 @@ on top of each other and give insight to adjacent topics.
 
 [x] Look into incorporating threads/concurrency into the project -> asynchronous send() + recv()
 [`45 min`] Research error handling best practices (stderr -> text file or?)
-[`1.5 hr`] Optimize I/O streams used - to buffer or not to buffer? input - yes, output - no?
+[`1.5 hr`] Optimize I/O streams used - to buffer or not to buffer? input - yes, output - no? buffered stream + use of buffer redundant?
 
 [ QUICK TASKS ]
 
@@ -415,7 +415,7 @@ on top of each other and give insight to adjacent topics.
 [x] Specify command line argument instructions + error handling (client)
 [x] Define NetCat Protocol
 [x] Fix extra send() and recv() exception after using "exit" termination
-[ ] Add short documentation for each methods (will help clarify for both other devs & myself) 
+[x] Add short documentation for each methods (will help clarify for both other devs & myself) 
 [ ] Notify client/server on whether or not the other "person" exited/joined -> maybe prompt for relisten?
 
 [ LARGER TASKS ]
@@ -423,9 +423,10 @@ on top of each other and give insight to adjacent topics.
 [ ] Merge server + client functionality?
 [x] Implement (async) continuous I/O socket streams: client stdin -> server (read) -> server stdout (+ vice versa) 
 [ ] Implement custom logger (e.g. date:timestamp: Success/Exception message -> file)
+[ ] Implement small test suite (benchmark speeds, edge case testing, multi-thread heavy traffic, etc.)
 
 -----------------------------------------------------------
-    #Potential Improvements (AVOID FEATURE CREEP)
+    #Potential Improvements
 -----------------------------------------------------------
 
 . Adding *communicator* object that includes some personal information; 
@@ -437,3 +438,4 @@ separate thread while the accept() call is *blocking* the initial thread
 instance variable? Probably not a big difference (instantiate the server
 with a port instead of using it for start), so it would depend more so
 on potential use cases
+. *Multi client support* - User IDs -> very small group chats 

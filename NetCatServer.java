@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.lang.IllegalArgumentException;
 import java.io.*;
 
@@ -8,10 +7,7 @@ public class NetCatServer {
         String hostname = "localhost";
         int port = 8080;
 
-        System.out.println("Phase 1: Server command-line argument handling");
-        /* ====
-            Command-line argument handling
-         */
+        // Command-line argument handling
         try{
             if (args.length < 2) {
                 throw new IllegalArgumentException("Please specify the following arguments:\n" +
@@ -30,24 +26,17 @@ public class NetCatServer {
             System.exit(1);
         }
 
-        /* ====
-           Start server
-         */
-        System.out.println("Phase 2: Trying to start server");
+        // Start server
         try(MySocketServer server = new MySocketServer(hostname, port);
             MySocketClient client = server.listen();
             NetCatProtocol nc = new NetCatProtocol(client.getInputStream(), client.getOutputStream());
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in))){
 
-            /* ====
-                Asynchronously read
-             */
+            // Asynchronous read
             Thread recv = new Thread(nc);
             recv.start();
 
-            /* ====
-                Continuously write from std in
-             */
+            // Continuously read from stdin (new line delimiter implicit through BufferedReader use)
             String inputLine;
             while ((inputLine = in.readLine()) != null){
                 if(inputLine.equals("exit")) {
@@ -58,12 +47,7 @@ public class NetCatServer {
                 nc.send(inputLine);
             }
 
-        } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             System.out.println(e.getMessage());
         }
     }

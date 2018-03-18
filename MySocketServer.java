@@ -40,21 +40,15 @@ public class MySocketServer implements AutoCloseable, Runnable{
     }
 
     public void run() {
-        try{
-            System.out.println("Asynchronously starting MySocketServer...");
-            this.listen();
-        }catch(IOException e){
-            System.out.println(e.getMessage());
-        }
-    }
 
+    }
     /* ====
         PUBLIC METHODS
      */
     public MySocketClient listen() throws IOException {
         System.out.printf(" %s started listening for a connection on port %d...\n", this.toString(), port);
         Socket sock = server.accept(); // blocking
-        System.out.println("Client connected");
+        System.out.println("*** You are now connected to NetCat 1.0 ***\n");
         return new MySocketClient(sock);
     }
 

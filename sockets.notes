@@ -403,21 +403,29 @@ on top of each other and give insight to adjacent topics.
     (Sub)Tasks
 -----------------------------------------------------------
 
-[ OPEN-ENDED TASKS ]
-. Look into incorporating threads/concurrency into the project -> asynchronous send() + recv()
-. Research error handline best practices (stderr -> text file or?)
+[ OPEN-ENDED/OPTIMIZATION TASKS ]
 
-[ QUICK TASKS (<= 1 Day) ]
+[x] Look into incorporating threads/concurrency into the project -> asynchronous send() + recv()
+[`45 min`] Research error handling best practices (stderr -> text file or?)
+[`1.5 hr`] Optimize I/O streams used - to buffer or not to buffer? input - yes, output - no?
+
+[ QUICK TASKS ]
+
 [x] Specify command line argument instructions + error handling (server)
 [x] Specify command line argument instructions + error handling (client)
-[ ] Redirect error handling to a text file?
 [x] Define NetCat Protocol
+[x] Fix extra send() and recv() exception after using "exit" termination
+[ ] Add short documentation for each methods (will help clarify for both other devs & myself) 
+[ ] Notify client/server on whether or not the other "person" exited/joined -> maybe prompt for relisten?
 
-[ LARGER TASKS - (> 1 Day) ] 
+[ LARGER TASKS ]
+
 [ ] Merge server + client functionality?
-[ ] Implement continuous I/O socket streams: client stdin -> server (read) -> server stdout (+ vice versa) 
+[x] Implement (async) continuous I/O socket streams: client stdin -> server (read) -> server stdout (+ vice versa) 
+[ ] Implement custom logger (e.g. date:timestamp: Success/Exception message -> file)
+
 -----------------------------------------------------------
-    #Potential Improvements
+    #Potential Improvements (AVOID FEATURE CREEP)
 -----------------------------------------------------------
 
 . Adding *communicator* object that includes some personal information; 

@@ -8,6 +8,7 @@ public class NetCatServer {
         String hostname = "localhost";
         int port = 8080;
 
+        System.out.println("Phase 1: Server command-line argument handling");
         /* ====
             Command-line argument handling
          */
@@ -32,18 +33,28 @@ public class NetCatServer {
         /* ====
            Start server
          */
+        System.out.println("Phase 2: Trying to start server");
         try(MySocketServer server = new MySocketServer(hostname, port);
             MySocketClient client = server.listen();
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-            NetCatProtocol nc = new NetCatProtocol(client.getInputStream(), client.getOutputStream())){
+            NetCatProtocol nc = new NetCatProtocol(client.getInputStream(), client.getOutputStream());
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in))){
 
+            /* ====
+                Asynchronously read
+             */
+            Thread recv = new Thread(nc);
+            recv.start();
+
+            /* ====
+                Continuously write from std in
+             */
             String inputLine;
             while ((inputLine = in.readLine()) != null){
                 if(inputLine.equals("exit")) {
-                    System.out.println("-   Server exiting   -");
-                    break;
+                    System.out.println("-   Server Exiting   -");
+                    System.exit(0);
                 }
-                nc.recv();
+
                 nc.send(inputLine);
             }
 

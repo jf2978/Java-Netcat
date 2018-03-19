@@ -264,6 +264,20 @@ about (primarily for future iterations, improvements, but also for curiosity)
 	series of data packets that are like individual puzzle pieces to the whole message
 	- This gives some breathing room for transmission optimzations (perhaps?)
 
+	#Best Practices for Exception Handling (continued)
+1. Using printStackTrace() should actually be avoided - often better to use a logger framework. This is due
+to a number of flexibity advantages gained from a framework:
+	a. You can log messages go to a configurable location.
+	b. The end user doesn't see the messages unless you configure the logging so that he/she does.
+	c. You can use different loggers and *logging levels*, etc to control how much little or much logging is recorded.
+	d. You can use different appender *formats* to control what the logging looks like.
+	e. You can easily plug the logging output into a larger monitoring / logging framework.
+	f. All of the above can be done without changing your code; and rather by editing the deployed application's logging config file.
+2. Through some additional quick research, it looks like `Log4j` has the upper hand in terms of performance.
+3. In general, debugging only gets more difficult to understand (especially in a multi-threaded environment with a high-level
+ language like Java) the more complex the application being written is. Utilizing an inherently hierarchical and 
+customizeable framework that doesn't "swallow" exceptions makes our lives easier.
+
 ------------------------------------------------------------
     #Threads & Concurrent Java
 -----------------------------------------------------------
@@ -406,8 +420,11 @@ on top of each other and give insight to adjacent topics.
 [ OPEN-ENDED/OPTIMIZATION TASKS ]
 
 [x] Look into incorporating threads/concurrency into the project -> asynchronous send() + recv()
-[`45 min`] Research error handling best practices (stderr -> text file or?)
+[x] Research error handling best practices (stderr -> text file or?)
 [`1.5 hr`] Optimize I/O streams used - to buffer or not to buffer? input - yes, output - no? buffered stream + use of buffer redundant?
+[`2 hrs` ] Learn how to use Gradle + take notes: "http://www.vogella.com/tutorials/Gradle/article.html"
+[`30 min`] Look into Log4j best/useful configurations - briefly understand why logging is better with a setting
+[`2 hrs`] (AFTER LIBRARIES ADDED) Really understand Maven/Gradle -> Seems like Gradle is the most modern + feature-rich
 
 [ QUICK TASKS ]
 
@@ -417,13 +434,13 @@ on top of each other and give insight to adjacent topics.
 [x] Fix extra send() and recv() exception after using "exit" termination
 [x] Add short documentation for each methods (will help clarify for both other devs & myself) 
 [ ] Notify client/server on whether or not the other "person" exited/joined -> maybe prompt for relisten?
-
+[ ] Incorporate Log4j library (print errors use logger NOT std out or std errors)
 
 [ LARGER TASKS ]
 
-[ ] Merge server + client functionality?
+[ ] Incorporate Commons CLI -> Merge server/client functionality = NetCat.java
+	[ ] Create CLI wrapper object: parses String arr, returns hostname + port, 
 [x] Implement (async) continuous I/O socket streams: client stdin -> server (read) -> server stdout (+ vice versa) 
-[ ] Implement custom logger (e.g. date:timestamp: Success/Exception message -> file)
 [ ] Implement small test suite (benchmark speeds, edge case testing, multi-thread heavy traffic, etc.)
 [ ] Implement/edit shell script to compile, find the ip address to broadcast (and maybe send as an invitation??)
 
@@ -440,4 +457,4 @@ separate thread while the accept() call is *blocking* the initial thread
 instance variable? Probably not a big difference (instantiate the server
 with a port instead of using it for start), so it would depend more so
 on potential use cases
-. *Multi client support* - User IDs -> very small group chats 
+. *Multi client support* - User IDs -> very small group chats -> Contact List (linked to IP addresses)

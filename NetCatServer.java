@@ -2,6 +2,10 @@ import java.lang.IllegalArgumentException;
 import java.io.*;
 
 public class NetCatServer {
+    /* ====
+        INSTANCE VARIABLES
+     */
+    private Socket
     public static void main(String[] args){
 
         String hostname = "localhost";

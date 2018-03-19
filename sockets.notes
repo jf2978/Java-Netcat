@@ -418,12 +418,14 @@ on top of each other and give insight to adjacent topics.
 [x] Add short documentation for each methods (will help clarify for both other devs & myself) 
 [ ] Notify client/server on whether or not the other "person" exited/joined -> maybe prompt for relisten?
 
+
 [ LARGER TASKS ]
 
 [ ] Merge server + client functionality?
 [x] Implement (async) continuous I/O socket streams: client stdin -> server (read) -> server stdout (+ vice versa) 
 [ ] Implement custom logger (e.g. date:timestamp: Success/Exception message -> file)
 [ ] Implement small test suite (benchmark speeds, edge case testing, multi-thread heavy traffic, etc.)
+[ ] Implement/edit shell script to compile, find the ip address to broadcast (and maybe send as an invitation??)
 
 -----------------------------------------------------------
     #Potential Improvements

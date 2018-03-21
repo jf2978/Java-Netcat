@@ -14,16 +14,16 @@ public class NetCat {
             // Static (class) variables
             private static final Option listen = new Option("l", "listen", false, "starts NetCat in listening mode (server)");
             private static final Option hostname = Option.builder("h").
-                    longOpt("host")
-                    .required(true)
-                    .valueSeparator()
+                    longOpt("hostname")
+                    .valueSeparator('=')
                     .desc("Hostname of the machine trying to connect to")
+                    .hasArg()
                     .build();
             private static final Option port = Option.builder("p").
                     longOpt("port")
-                    .required(true)
-                    .valueSeparator()
+                    .valueSeparator('=')
                     .desc("Port number specifying the process to connect to (within the machine)")
+                    .hasArg()
                     .build();
             private static final Options ncOptions = initOptions();
             private static final HelpFormatter help = new HelpFormatter();
@@ -51,33 +51,23 @@ public class NetCat {
              */
             // getHostname(): returns hostname if provided, else defaults to localhost
             private String getHostname() {
-                if(cmd.hasOption("hostname")) {
-                    return ncOptions.getOption("hostname").getValue();
-                }else {
-                    System.out.println("No hostname provided; using \'localhost\'");
-                    return "localhost";
-                }
+                return cmd.getOptionValue("hostname", "localhost");
             }
 
             // getPort(): returns port if provided, else defaults to 8080
             private int getPort() throws NumberFormatException{
-                if(cmd.hasOption("port")) {
-                    return Integer.parseInt(ncOptions.getOption("port").getValue());
-                }else {
-                    System.out.println("No port provided; using port 8080");
-                    return 8080;
-                }
+                return Integer.parseInt(cmd.getOptionValue("port", "8080"));
             }
 
             // isServer(): checks if listen flag has been passed; used to branch into listening (server) mode or not
             private boolean isServer() {
-                return cmd.hasOption("l");
+                return cmd.hasOption("listen");
             }
 
             // hasRequiredArgs():
-            private boolean hasRequiredArgs() {
-                return cmd.hasOption("hostname") && cmd.hasOption("port");
-            }
+            //private boolean hasRequiredArgs() {
+              //  return cmd.hasOption("hostname") && cmd.hasOption("port");
+            //}
 
             /* ====
                 PRIVATE METHODS
@@ -92,6 +82,7 @@ public class NetCat {
                 return ncOptions;
             }
         }
+
         /* ====
             MAIN METHOD
          */
@@ -105,21 +96,22 @@ public class NetCat {
             // Parse Command-line arguments
             try {
                 ncArgs = new NetCatArgs(args);
-                if (!ncArgs.hasRequiredArgs()) {
-                    NetCatArgs.help.printHelp("Netcat - Java", NetCatArgs.ncOptions, true);
-                    System.exit(0);
-                }
+                //if (!ncArgs.hasRequiredArgs()) {
+                  //  NetCatArgs.help.printHelp("nc", NetCatArgs.ncOptions );
+                   // System.exit(0);
+                //}
 
                 hostname = ncArgs.getHostname();
                 port = ncArgs.getPort();
             }catch (ParseException | NumberFormatException e) {
+                e.printStackTrace();
                 System.out.println(e.getMessage());
                 System.exit(0);
             }
 
             // Start client/server
-            try(MySocketServer server = new MySocketServer(hostname, port);
-                MySocketClient client = ncArgs.isServer() ? server.listen() : new MySocketClient(hostname, port);
+            try(MySocketServer server = ncArgs.isServer() ? new MySocketServer(hostname, port): null;
+                MySocketClient client = server != null ? server.listen() : new MySocketClient(hostname, port);
                 NetCatProtocol nc = new NetCatProtocol(client.getInputStream(), client.getOutputStream());
                 BufferedReader in = new BufferedReader(new InputStreamReader(System.in))){
 

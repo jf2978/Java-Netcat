@@ -4,13 +4,17 @@ import java.io.*;
 
     public class MySocketClient implements AutoCloseable, Runnable{
 
-        // INSTANCE VARIABLES
+        /* ====
+            INSTANCE VARIABLES
+         */
         private int port;
         private String host;
         private Socket client;
         private SocketAddress address;
 
-        // CONSTRUCTORS
+        /* ====
+            CONSTRUCTORS
+         */
         public MySocketClient() throws IOException {
             port = 8080;
             host = "localhost";
@@ -31,7 +35,9 @@ import java.io.*;
             port = sock.getPort();
             host = sock.getInetAddress().getHostName();
         }
-        // INTERFACE METHODS
+        /* ====
+            INTERFACE METHODS
+         */
         @Override
         public void close() throws IOException{
             this.client.close();
@@ -39,10 +45,12 @@ import java.io.*;
 
         @Override
         public void run(){
-
+            // Placeholder for extensible functionality in the future
         }
 
-        // PUBLIC METHODS
+        /* ====
+            PUBLIC METHODS
+         */
         public void connect() throws IOException{
             SocketAddress server = this.address;
             System.out.printf(" Trying to connect to %s on port %d...\n", server.toString(), port);
@@ -54,10 +62,15 @@ import java.io.*;
             return address;
         }
 
-        public OutputStream getOutputStream() throws IOException{ return client.getOutputStream(); }
+        public OutputStream getOutputStream() throws IOException{
+            return client.getOutputStream();
+        }
 
-        public InputStream getInputStream() throws IOException{ return client.getInputStream(); }
+        public InputStream getInputStream() throws IOException{
+            return client.getInputStream();
+        }
 
+        @Override
         public String toString(){
             return String.format("[ Address: %s, Port: %d ]", client.getInetAddress(), port);
         }

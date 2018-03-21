@@ -40,8 +40,9 @@ public class MySocketServer implements AutoCloseable, Runnable{
     }
 
     public void run() {
-
+        // Placeholder
     }
+
     /* ====
         PUBLIC METHODS
      */
@@ -52,7 +53,9 @@ public class MySocketServer implements AutoCloseable, Runnable{
         return new MySocketClient(sock);
     }
 
-    public SocketAddress getAddress() { return address; }
+    public SocketAddress getAddress() {
+        return address;
+    }
 
     public String toString(){
         return String.format("[ Address: %s, Port: %d ]", server.getInetAddress(), port);

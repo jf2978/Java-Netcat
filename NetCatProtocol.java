@@ -10,19 +10,22 @@ public class NetCatProtocol implements AutoCloseable, Runnable {
      */
 
     /* ====
-        INSTANCE VARIABLES
+        VARIABLES
      */
+    // Instance variables
     private BufferedInputStream input;
     private BufferedOutputStream output;
 
     /* ====
-        CONSTRUCTORS
+        CONSTRUCTOR(S)
      */
+    // Default NetCatProtocol
     public NetCatProtocol(InputStream is, OutputStream os){
         input = new BufferedInputStream(is);
         output = new BufferedOutputStream(os);
     }
 
+    // Buffered by specified size
     public NetCatProtocol(InputStream is, OutputStream os, int size){
         input = new BufferedInputStream(is, size);
         output = new BufferedOutputStream(os, size);

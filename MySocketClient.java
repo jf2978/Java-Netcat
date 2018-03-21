@@ -13,15 +13,14 @@ import java.io.*;
         private SocketAddress address;
 
         /* ====
-            CONSTRUCTORS
+            CONSTRUCTOR(S)
          */
+        // Default constructor, creates an unconnected client socket
         public MySocketClient() throws IOException {
-            port = 8080;
-            host = "localhost";
-            address = new InetSocketAddress(host, port);
-            client = new Socket(host, port);
+            client = new Socket();
         }
 
+        // Creates a client socket + connects to the specified port number + host
         public MySocketClient(String hostname, int portNum) throws IOException {
             port = portNum;
             host = hostname;
@@ -29,6 +28,7 @@ import java.io.*;
             client = new Socket(host, port);
         }
 
+        // Creates a MySocketClient as a wrapper for a provided Socket object
         public MySocketClient(Socket sock){
             client = sock;
             address = sock.getLocalSocketAddress();
@@ -45,14 +45,14 @@ import java.io.*;
 
         @Override
         public void run(){
-            // Placeholder for extensible functionality in the future
+            // Placeholder for extensibility purposes
         }
 
         /* ====
             PUBLIC METHODS
          */
-        public void connect() throws IOException{
-            SocketAddress server = this.address;
+        // For an unconnected MySocketClient; attempts to connect to a server at the given address
+        public void connect(SocketAddress server) throws IOException{
             System.out.printf(" Trying to connect to %s on port %d...\n", server.toString(), port);
             this.client.connect(server, 5000); // blocking
             System.out.println("Connected to server");

@@ -425,6 +425,7 @@ on top of each other and give insight to adjacent topics.
 [`2 hrs` ] Learn how to use Gradle + take notes: "http://www.vogella.com/tutorials/Gradle/article.html"
 [`30 min`] Look into Log4j best/useful configurations - briefly understand why logging is better with a setting
 [`2 hrs`] (AFTER LIBRARIES ADDED) Really understand Maven/Gradle -> Seems like Gradle is the most modern + feature-rich
+[`1 hr`] Optimize (for best practice) access modifiers used -> review the larger implications  of good encapsulation
 
 [ QUICK TASKS ]
 
@@ -438,12 +439,13 @@ on top of each other and give insight to adjacent topics.
 	
 [ LARGER TASKS ]
 
-[ ] Incorporate Commons CLI -> Merge server/client functionality = NetCat.java
+[x] Incorporate Commons CLI -> Merge server/client functionality = NetCat.java
 	[x] Create CLI wrapper object: parses String arr, returns hostname + port = NetCatArgs
 	[x] Merge NetCat* classes
 	[x] Debug option/command line objects
 	[x] Set "getOptionValue" default to localhost + 8080 -> change args to be optional 
-	[ ] Test user experience
+	[x] Clean up code - remove redundant/unecessary methods (NetCat overloaded constructor, requiredArgs())
+
 [x] Implement (async) continuous I/O socket streams: client stdin -> server (read) -> server stdout (+ vice versa) 
 [ ] Implement small test suite (benchmark speeds, edge case testing, multi-thread heavy traffic, etc.)
 [ ] Implement/edit shell script to compile, find the ip address to broadcast (and maybe send as an invitation??)

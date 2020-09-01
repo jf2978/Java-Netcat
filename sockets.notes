@@ -17,14 +17,14 @@ Subgoals:
 
 - Socket: An endpoint of a two-way communication
 running on some kind of network. It is bound to a port number
-(the #port number# specfies the particular process/application the 
+(the #port number# specfies the particular process/application the
 connection is meant for, while the #IP address# specifies the machine)
 
 - Client_Server_Model: Essential model of network computing today
 that states the fundamental relationship between machines connected
 via a network. A #server# provides resources and the #client# requests
 those resources utilizing some kind of *protocol* to define how communication
-sohuld be handled between both remote parties (e.g. what should the server be 
+sohuld be handled between both remote parties (e.g. what should the server be
 expecting from the client?). Sockets in Java would be operating via the TCP/IP protocol.
 
 [ #GENERAL FRAMEWORK# ]
@@ -33,7 +33,7 @@ expecting from the client?). Sockets in Java would be operating via the TCP/IP p
 2. Open an input and output stream to the socket
 3. Read and write to the stream according to the server's protocol
 4. Close the streams
-5. Close the socket 
+5. Close the socket
 
 [ #SERVER# ]
 
@@ -49,8 +49,8 @@ expecting from the client?). Sockets in Java would be operating via the TCP/IP p
 2. connect() -> sends request to server at given address
 3. Read/write
 
-NOTE: The methods needed to establish a connection and the differences between "clients" and "servers" 
-are a bit more complicated - more details on why only the server binds to a port (i.e. why the client is auto-assigned), 
+NOTE: The methods needed to establish a connection and the differences between "clients" and "servers"
+are a bit more complicated - more details on why only the server binds to a port (i.e. why the client is auto-assigned),
 why (in Java) there is no need to explicitly call connect on a listening port and address, etc.
 
 ------------------------------------------------------------
@@ -63,22 +63,22 @@ to give a quick overview of both TCP and IP (and why protocols are important in 
 
 1. Transmission Control Protocol (Transport Layer): In general, TCP controls the transmission of data
 packets - ensuring reliability of sending and the integrity of the data itself. That is, TCP ensures
-data *reliably* reaches its destination in a *consistently* streamed fashion to avoid any hiccups for 
-more sensitive network operations (think VoIP calls, audio streaming, etc.) all in the correct *order* 
+data *reliably* reaches its destination in a *consistently* streamed fashion to avoid any hiccups for
+more sensitive network operations (think VoIP calls, audio streaming, etc.) all in the correct *order*
 (data is broken down into packets for ease of transmission, but a scrambled words in an essay you send
 to your professor is as good as not doing the assignment).
 
-2. Internet Protocol (Internet Layer): 	IP is charge of routing information, as well as constructing the addresses 
-that standardize the locations of every single internet-enabled device. Without getting overwhelmed with information 
-about the different types of IP addresses, it's mainly important to understand that IP addresses unique, 
+2. Internet Protocol (Internet Layer): 	IP is charge of routing information, as well as constructing the addresses
+that standardize the locations of every single internet-enabled device. Without getting overwhelmed with information
+about the different types of IP addresses, it's mainly important to understand that IP addresses unique,
 multi-layered locations that the protocol uses to actually get information from point A to point B.
 
 - Many of the cooperation of these protocol layers (especially with TCP/IP that work hand-in-hand), is done by
 specifying a data packet structure with additional bits of information (headers/tags) - TCP can mark the appropriate
 order for each packet, IP can effectively locate the destination address and attach the source address for example.
 
-- Overall the famous TCP/IP combo are what define the *rules and standards* for network communication. For the 
-purposes of this project, it gives insight into the magic behind the ability to send information from machine to 
+- Overall the famous TCP/IP combo are what define the *rules and standards* for network communication. For the
+purposes of this project, it gives insight into the magic behind the ability to send information from machine to
 another anywhere else in the world at the touch of a button.
 
 ------------------------------------------------------------
@@ -99,19 +99,19 @@ another anywhere else in the world at the touch of a button.
 . Create a basic Java version of netcat - arbitrary client/server communication (2 running programs needed)
 . NOTE: In order to get around making them two separate Java projects, we can use a command line argument to differentiate client and server functionality
 
-. With netcat it seems like both people messaging are simultaneously acting as servers and clients (you send + receive messages), but really 
+. With netcat it seems like both people messaging are simultaneously acting as servers and clients (you send + receive messages), but really
 the person who starts the program first would be the initial 'server' (if there doesn't already exist a listening connection), and the next person
 would simply connect to the address.
 
 . It would also be cool for each person to have an identity + profile (can be wrapped in its own class)
-. NOTE: In order to use the shell script, the view settings of sublime have to be changed to Unix 
+. NOTE: In order to use the shell script, the view settings of sublime have to be changed to Unix
 
 [ #DESIGN CHOICES# ]
-. Chose to catch a number of exceptions (like the IOExceptions that crowded the MySocketServer 
+. Chose to catch a number of exceptions (like the IOExceptions that crowded the MySocketServer
 constructor and methods) due to the common appearance of the IOException and the different possible
 places they could be coming from - it made more sense to fail fast instead of propogating values
 of a deeper error like failure to bind/instantiate the server socket
-. While it really doesn't matter which is teachnically the "client" and which is the "server", 
+. While it really doesn't matter which is teachnically the "client" and which is the "server",
 the distinctions for this project were made in order to account for new use cases down the road
 (e.g. chat bot that multiple clients can connect to, server that relays messages to other clients, etc.)
 . Protocol: 55 byte content length based on a few estimates:
@@ -133,7 +133,7 @@ import java.net.Socket;
 		ServerSocket server = new ServerSocket();
 		SocketAddress address = new InetSocketAddress("hostname", 8000);
 		server.bind(address);
-		
+
 		// while loop logic?
 		server.accept();
 	}
@@ -142,11 +142,11 @@ import java.net.Socket;
 		// 'Client' functinality
 		Socket client = new Socket();
 		SocketAddress address = new InetSocketAddress("hostname", 8000);
-		
+
 		// loop logic?
 		client.connect(address);
 	}
-	
+
 [\java]
 
 ------------------------------------------------------------
@@ -154,12 +154,12 @@ import java.net.Socket;
 -----------------------------------------------------------
 
    #What port number should I be using when testing locally?
- 
+
  - Pretty straight forward answer for the most part. Given the
  outline for the Internet Protocol suite, designating port numbers
  for specific purposes (outlined in the #RFC 1700#). Thus a quick rule
- of thumb as to not disrupt the designated, specialized ports is 
- to use any port >1024 (0-1024 are resreved by the protocol) and 
+ of thumb as to not disrupt the designated, specialized ports is
+ to use any port >1024 (0-1024 are resreved by the protocol) and
  <65535 (largest unassigned port number)
 
 	#Why is the exception handling framework in Java useful?
@@ -182,10 +182,10 @@ import java.net.Socket;
 
     #What does it mean for a thread to be interrupted - e.g. Interrupted Exceptions
 
-. An *interrupt* is an indication to a thread that it should stop what it 
-is doing and do something else. It's up to the programmer to decide exactly 
-how a thread responds to an interrupt, but it is very common for the 
-thread to terminate. 
+. An *interrupt* is an indication to a thread that it should stop what it
+is doing and do something else. It's up to the programmer to decide exactly
+how a thread responds to an interrupt, but it is very common for the
+thread to terminate.
 
 - More on this concept later...
 
@@ -209,23 +209,23 @@ needs a unique file descriptor, once a connection with a client is established,
 connect()-ing client as agreeing upon a meeting point (say port 8080) and migrating
 else where after they've met up. Now say multiple connections are trying to meet, in
 order for the server to handle the multiple different requests from the incoming
-clients, spearating each to their own "channel" makes it easier to compartmentalize 
-resource requests for the server to handle. 
+clients, spearating each to their own "channel" makes it easier to compartmentalize
+resource requests for the server to handle.
 
 	#Don't println to a Socket - JavaRanch Technote 1157
-. After constant debugging of BufferedReader and never getting the application to read 
-a line I stumbled upon this article that help me understand common causes of 
+. After constant debugging of BufferedReader and never getting the application to read
+a line I stumbled upon this article that help me understand common causes of
 client-server deadlocks in Java
 . This article primarily refers to the different line-breaking conventions and the
 inherent dangers of using *println* with sockets, since underlying operating systems
-expect LF, CRLF, CR...etc. 
+expect LF, CRLF, CR...etc.
 	`
 	#What is a thread, and why do I need them
 . In order to fully realize the version of netcat that I am imagining, I need to get
 around all of these synchronous, blocking calls - I have to dive deep into learn threading...
 
 	#What's the most effective way of planning a software/engineering project
-. With the organization of a major side project always comes the issue of organization and 
+. With the organization of a major side project always comes the issue of organization and
 scope - even though I'm starting this for myself, this project isn't just for me and I need
 my code, project organization and scope to reflect that sentiment. Unfortauntely, effectively
 scoping a project in this sense is not something taught (really at all). I've decided to take
@@ -275,7 +275,7 @@ to a number of flexibity advantages gained from a framework:
 	f. All of the above can be done without changing your code; and rather by editing the deployed application's logging config file.
 2. Through some additional quick research, it looks like `Log4j` has the upper hand in terms of performance.
 3. In general, debugging only gets more difficult to understand (especially in a multi-threaded environment with a high-level
- language like Java) the more complex the application being written is. Utilizing an inherently hierarchical and 
+ language like Java) the more complex the application being written is. Utilizing an inherently hierarchical and
 customizeable framework that doesn't "swallow" exceptions makes our lives easier.
 
 ------------------------------------------------------------
@@ -290,19 +290,19 @@ are often seen as synonymous with entire applications or programs, and to a cert
 extent this notion isn't totally off, however that are a number of applications that actually
 incroporate interprocess communcation (IPC) nto only within the same operating system, but even
 across different systems.
-. NOTE: Processes are are particular instances of a program thathave a 
+. NOTE: Processes are are particular instances of a program thathave a
 #self-contained execution environment# - that is, a process has, in and of itself, all
 the components it needs for execution. Processes have their own memory space, address space, executable
 code, and unique process identifier.
-. Furthermore, processes are known to be more for "heavyweight" tasks within an operating system, so 
+. Furthermore, processes are known to be more for "heavyweight" tasks within an operating system, so
 processes tend to have more overhead (given it requires dedicated memory/address space, etc.)
 . Threads are often referred to as lightweight process, but they aren't as related than at first glance.
 They are the smallest sequence of programmed instructions managed by the scheduler of an operating system.
 Each process has at least one thread, but what they are from the perspective of the operating system
-is very distinct: 
+is very distinct:
 . A *process* is more so related to data organization (setting aside memory and address
 space; an instance of execution instructions for an entirely new program); A *thread* is a more like
-a slice of process and is what the CPU actually runs - sharing resources with the process itself as well 
+a slice of process and is what the CPU actually runs - sharing resources with the process itself as well
 as with other threads (if there are any).
 
 [ #Thread Objects# ]
@@ -334,23 +334,23 @@ public class HelloRunnable implements Runnable {
 
 1) sleep(): Causes the specified thread to explicitly stop execution for a specified period
 of time. In more detail, the sleep method interacts with the Operating System's scheduler
-to put the current thread in a wait state (then back to runnable) for the CPU to continue. 
-This means that sleep is !DEPENDENT! on the underlying OS scheduler and may not take more/less time than specified. 
+to put the current thread in a wait state (then back to runnable) for the CPU to continue.
+This means that sleep is !DEPENDENT! on the underlying OS scheduler and may not take more/less time than specified.
 
 2) start():	Starts a thread's execution. For a Thread object, start() actually creates the thread
-so that the JVM can call the Runnable object's run() method in parallel. **run is called on a new thread** 
+so that the JVM can call the Runnable object's run() method in parallel. **run is called on a new thread**
 
 3) run(): For a Runnable object, this is the custom method that defines what to do when the object
 is executed (run is called on it). By default (that is with no attached Runnable object other than Thread itself)
 this method does nothing. **run is called on the current thread**
 
-4) setPriority(): Sets the current thread's priority (ranges between MIN_PRIORITY and MAX_PRIORITY) - more on 
+4) setPriority(): Sets the current thread's priority (ranges between MIN_PRIORITY and MAX_PRIORITY) - more on
 *Priority Scheduling* in Java below.
 
 5) interrupt(): An *interrupt* is an indication to a thread that it should stop what its doing and do something else.
 Especially when taking into account the context of controlling execution flow that Threads are used for, the use
-of interrupts make sense. 
-	a. Numerous methods throw InterruptedException, such that Threads support their own interruptions in 
+of interrupts make sense.
+	a. Numerous methods throw InterruptedException, such that Threads support their own interruptions in
 	that sense - while the thread is doing whatever it's doing, the exception can be caught.
 	b. For operations that don't invoke methods with InterruptedException (say the thread is working for a while
 	or won't run any vaible methods for the remainder of its execution), we have to ensure that we manually check
@@ -358,8 +358,8 @@ of interrupts make sense.
 
 6) isInterrupted(): Checks if the Thread instance is *currently interrupted*
 
-7) interrupted(): (static) Checks if the current thread *has been interrupted since last time queried* and 
-subsequently *clears the interruption flag* (such that if called two times in a row, the second call would 
+7) interrupted(): (static) Checks if the current thread *has been interrupted since last time queried* and
+subsequently *clears the interruption flag* (such that if called two times in a row, the second call would
 be false *even if the first was true*)
 
 8) join(): This method allows for one thread to wait for the completion of another - such that calling
@@ -368,7 +368,7 @@ join on a Thread object (let's call it t) causes the current thread to pause unt
 
 [ #Priority Scheduling# ]
 
-- In order to understand scheduling on a deeper level, I've tried to run through some concepts that both build 
+- In order to understand scheduling on a deeper level, I've tried to run through some concepts that both build
 on top of each other and give insight to adjacent topics.
 
 	[ *Fixed Priority Preemptive Scheduling* ]
@@ -377,12 +377,12 @@ on top of each other and give insight to adjacent topics.
 		Priority Scheduling tends to be a common use case for *priority queues* (relating back to past data strucuture coursework)
 		. `Fixed` in the sense of being set a specific priority rank for every process and subsequently being placed on the queue.
 		. `Preemptive` in the sense of the process'/thread's ability to get interrupted through no cooperation of its own
-		
+
 		[ *Real Time Systems* ]
 		. The term "real-time" mostly depends on the context to which the system is being used, characterized by specified time "deadlines".
 		In most cases, this is on the order of milliseconds.
-		. A real-time software application is thus categorized by the *guarantee of returning a processed result within the specified time* 
-		*frame regardless of system load* - a critical guarantee for time-sensitive operations (anti-lock brakes on a vehicle for ex.) 
+		. A real-time software application is thus categorized by the *guarantee of returning a processed result within the specified time*
+		*frame regardless of system load* - a critical guarantee for time-sensitive operations (anti-lock brakes on a vehicle for ex.)
 
 		[ *Preemption* ]
 			. Preemption is the act of temporarily interrupting a task being carried out, through no cooperation of its own,
@@ -390,24 +390,24 @@ on top of each other and give insight to adjacent topics.
 			. The detail that *preemption does not involve the process itself* is an important one: preemption tends
 			to refer to a sort overriding of process/thread functionality - normally carried out by a *privileged* task
 			(*Protection Rings*) or a preemptive scheduler (*Time Slices*)
-			. NOTE: The essential feature of storing the current process state and loading another's is more closely related to 
-			the term *context switching* 
+			. NOTE: The essential feature of storing the current process state and loading another's is more closely related to
+			the term *context switching*
 
 			[ *Protection Rings* ]
-				. Also called hierarchical proteciton domains, refer to the mechanism of giving certain operations some 
+				. Also called hierarchical proteciton domains, refer to the mechanism of giving certain operations some
 				inherent priority (or `privilege`) - typically more strongly to those operations closer to hardware and operating
 				system kernel operations.
 
 			[ *Time Slice* ]
 				. Defined as the period of time for which a process is allowed to run in a preemptive multitasking system.
-				That is, for preemptive multitasking systems, the aim is to give each process a regular "slice" of operating time, 
+				That is, for preemptive multitasking systems, the aim is to give each process a regular "slice" of operating time,
 				allowing for more efficient multitasking that can rapidly deal with incoming data, current process, etc.
 				. Thus in this context, time slices defined by the preemptive scheduler have the power to "preempt" a current process'
-				operations (unsolicited interrupt essentially) for more efficient use elsewhere. 
+				operations (unsolicited interrupt essentially) for more efficient use elsewhere.
 
 		[ *Resource Starvation* ]
 			. Starvation refers to the common problem in concurrent computing where a process is perpetually denied the resources
-			needed for its work. This situation is either caused by errors in scheduling, overly-simplistic scheduling algorithms, 
+			needed for its work. This situation is either caused by errors in scheduling, overly-simplistic scheduling algorithms,
 			or resource leaks.
 			. NOTE: Taking advantage of potential resource starvation is what a number of viruses actually take advantage of (ex. DoS)
 			and the impossibility of starvation known as "starvation-freedom" or "lockout-freedom", is often quite necessary.
@@ -433,20 +433,20 @@ on top of each other and give insight to adjacent topics.
 [x] Specify command line argument instructions + error handling (client)
 [x] Define NetCat Protocol
 [x] Fix extra send() and recv() exception after using "exit" termination
-[x] Add short documentation for each methods (will help clarify for both other devs & myself) 
+[x] Add short documentation for each methods (will help clarify for both other devs & myself)
 [ ] Notify client/server on whether or not the other "person" exited/joined -> maybe prompt for relisten?
 [ ] Incorporate Log4j library (print errors use logger NOT std out or std errors)
-	
+
 [ LARGER TASKS ]
 
 [x] Incorporate Commons CLI -> Merge server/client functionality = NetCat.java
 	[x] Create CLI wrapper object: parses String arr, returns hostname + port = NetCatArgs
 	[x] Merge NetCat* classes
 	[x] Debug option/command line objects
-	[x] Set "getOptionValue" default to localhost + 8080 -> change args to be optional 
+	[x] Set "getOptionValue" default to localhost + 8080 -> change args to be optional
 	[x] Clean up code - remove redundant/unecessary methods (NetCat overloaded constructor, requiredArgs())
 
-[x] Implement (async) continuous I/O socket streams: client stdin -> server (read) -> server stdout (+ vice versa) 
+[x] Implement (async) continuous I/O socket streams: client stdin -> server (read) -> server stdout (+ vice versa)
 [ ] Implement small test suite (benchmark speeds, edge case testing, multi-thread heavy traffic, etc.)
 [ ] Implement/edit shell script to compile, find the ip address to broadcast (and maybe send as an invitation??)
 
@@ -454,12 +454,12 @@ on top of each other and give insight to adjacent topics.
     #Potential Improvements
 -----------------------------------------------------------
 
-. Adding *communicator* object that includes some personal information; 
+. Adding *communicator* object that includes some personal information;
 can be displayed upon connection, or can be queried by another user
 . Multiple client support (Introduction to *threading* perhaps?)
 . In order to incorporate some kind of loading screenm I would need to make a
 separate thread while the accept() call is *blocking* the initial thread
-. Change the port number of my sockets to be inputs to start() and not an 
+. Change the port number of my sockets to be inputs to start() and not an
 instance variable? Probably not a big difference (instantiate the server
 with a port instead of using it for start), so it would depend more so
 on potential use cases
